@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: fyndry_mongodb
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - fyndry_network
+    healthcheck:
+      test: ['CMD', 'mongosh', '--eval', 'db.adminCommand("ping")']
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: fyndry_server
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    ports:
+      - '5001:5001'
+    environment:
+      - PORT=5001
+      - NODE_ENV=production
+      - CLIENT_URL=http://localhost
+      - MONGO_URI=mongodb://mongodb:27017/fyndry
+      - JWT_ACCESS_SECRET=fyndry_super_secret_access_jwt_key_2026_prod
+      - JWT_REFRESH_SECRET=fyndry_super_secret_refresh_jwt_key_2026_prod
+      - JWT_ACCESS_EXPIRES_IN=15m
+      - JWT_REFRESH_EXPIRES_IN=7d
+      - ADMIN_EMAIL=admin@fyndry.com
+      - ADMIN_PASSWORD=Admin@FynDry2026
+      - RAZORPAY_KEY_ID=${RAZORPAY_KEY_ID:-rzp_test_placeholder}
+      - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET:-placeholder_secret_key}
+      - RAZORPAY_WEBHOOK_SECRET=${RAZORPAY_WEBHOOK_SECRET:-fyndry_razorpay_webhook_secret_2026}
+      - ENABLE_COD=true
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME:-scni2mxv}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY:-295799843714964}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET:-NeY8h7xKn-5iZuY4Sr9MjhoFgwU}
+    networks:
+      - fyndry_network
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: fyndry_client
+    restart: unless-stopped
+    depends_on:
+      - server
+    ports:
+      - '80:80'
+    networks:
+      - fyndry_network
+
+volumes:
+  mongo_data:
+    driver: local
+
+networks:
+  fyndry_network:
+    driver: bridge

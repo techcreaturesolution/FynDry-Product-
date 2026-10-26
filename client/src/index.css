@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  body {
+    background-color: #FFF8E7;
+    color: #2D3748;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Baloo 2', cursive, sans-serif;
+  }
+}
+
+@layer utilities {
+  /* Glassmorphism effects */
+  .glass-nav {
+    background: rgba(255, 248, 231, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(31, 107, 58, 0.08);
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+  }
+
+  /* Text balance for headlines */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Custom subtle grain / texture overlay if needed */
+  .natural-gradient {
+    background: radial-gradient(circle at 10% 20%, rgba(31, 107, 58, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(163, 38, 15, 0.04) 0%, transparent 40%);
+  }
+}
+
+/* Custom styled scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FFF8E7;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C4D7C7;
+  border-radius: 9999px;
+  border: 2px solid #FFF8E7;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1F6B3A;
+}
+
+/* Ribbon styling */
+.ribbon-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #1F6B3A, #2E8B4F);
+  color: white;
+  padding: 0.4rem 1.25rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 9999px;
+  box-shadow: 0 4px 14px rgba(31, 107, 58, 0.25);
+}
